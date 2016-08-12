@@ -3,7 +3,7 @@ package hackerrank.algorithms.warmup;
 import java.util.Scanner;
 
 /**
- * https://www.hackerrank.com/challenges/compare-the-triplets
+ * https://www.hackerrank.com/challenges/a-very-big-sum
  */
 public class AVeryBigSum {
     public static void main(String[] args) {
