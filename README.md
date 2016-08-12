@@ -1,3 +1,3 @@
-# Coding_Practice
+# Coding Practice
 
-Solutions to coding challenges (Hackerrank, Hackerearth etc)
+Java based solutions to coding challenges (Hackerrank, Hackerearth etc)
