@@ -44,7 +44,7 @@ public class ElevatorSystemManager {
     }
 
     public void addFloorRequest(Direction direction, int floor) {
-        floors.get(floor).requestUp();
+        floors.get(floor).request(direction);
     }
 
     public void logState() {

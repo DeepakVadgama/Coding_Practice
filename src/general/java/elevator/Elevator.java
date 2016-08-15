@@ -1,7 +1,7 @@
 package general.java.elevator;
 
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.TreeSet;
 
 public class Elevator {
 
@@ -11,8 +11,8 @@ public class Elevator {
     private int currentFloor = 0;
     private Direction direction = Direction.UP;
     private boolean activated;
-    private final ConcurrentSkipListSet<Integer> requestsUp = new ConcurrentSkipListSet<>();
-    private final ConcurrentSkipListSet<Integer> requestsDown = new ConcurrentSkipListSet<>();
+    private final TreeSet<Integer> requestsUp = new TreeSet<>();
+    private final TreeSet<Integer> requestsDown = new TreeSet<>();
 
     public Elevator(int elevatorNumber, int minFloor, int maxFloor, boolean activated) {
         this.elevatorNumber = elevatorNumber;

@@ -1,5 +1,9 @@
 package general.java.elevator;
 
+import java.util.TreeSet;
+
+import static general.java.elevator.Direction.*;
+
 /**
  * Controls movement of Elevator.
  */
@@ -7,6 +11,7 @@ public class ElevatorController implements Runnable {
 
     private final Elevator elevator;
     private FloorRequestManager floorRequests;
+    public static final int THRESHOLD = 2;
 
     public ElevatorController(Elevator elevator, FloorRequestManager floorRequests) {
         this.elevator = elevator;
@@ -18,7 +23,7 @@ public class ElevatorController implements Runnable {
 
         while (true) {
 
-            // Remove any floor requests for current floor
+            // Remove any floor requests for current floor in elevator direction
             elevator.removeRequest(elevator.getDirection(), elevator.getCurrentFloor());
             floorRequests.removeRequest(elevator.getDirection(), elevator.getCurrentFloor());
             floorRequests.removeIntentRequest(elevator.getDirection(), elevator.getCurrentFloor());
@@ -70,73 +75,102 @@ public class ElevatorController implements Runnable {
 
     // TODO: This is total mess. Clean it up.
     private Integer moveAnyWithinThreshold() {
+
+        final TreeSet<Integer> intentDown = floorRequests.getIntentToServeRequestsDown();
+        final TreeSet<Integer> intentUp = floorRequests.getIntentToServeRequestsUp();
+
+        final int currentFloor = elevator.getCurrentFloor();
+        Integer targetFloor = null;
         if (isMoving()) {
             final Direction direction = elevator.getDirection();
-            if (Direction.DOWN == direction && !floorRequests.getIntentToServeRequestsDown().isEmpty()) {
-                final Integer floor = floorRequests.getIntentToServeRequestsDown().pollFirst();
-                if (floor != null) {
-                    elevator.getRequestsDown().add(floor);
+            if (direction == DOWN) {
+
+                synchronized (intentDown) {
+                    if (!intentDown.isEmpty()) {
+                        if (isWithinThreshold(currentFloor, intentDown.first())) {
+                            targetFloor = intentDown.pollFirst();
+                            elevator.getRequestsDown().add(targetFloor);
+                        }
+                    }
                 }
-                return floor;
-            } else if (Direction.UP == direction && !floorRequests.getIntentToServeRequestsUp().isEmpty()) {
-                final Integer floor = floorRequests.getIntentToServeRequestsUp().pollFirst();
-                if (floor != null) {
-                    elevator.getRequestsUp().add(floor);
+
+            } else if (direction == UP) {
+
+                synchronized (intentDown) {
+                    if (!intentUp.isEmpty()) {
+                        if (isWithinThreshold(currentFloor, intentUp.first())) {
+                            targetFloor = intentUp.pollFirst();
+                            elevator.getRequestsUp().add(targetFloor);
+                        }
+                    }
                 }
-                return floor;
             }
         } else {
-            if (!floorRequests.getIntentToServeRequestsUp().isEmpty()) {
-                final Integer floor = floorRequests.getIntentToServeRequestsUp().pollFirst();
-                if (floor != null) {
-                    elevator.getRequestsUp().add(floor);
+            synchronized (intentUp) {
+                if (!intentUp.isEmpty()) {
+                    if (isWithinThreshold(currentFloor, intentUp.first())) {
+                        targetFloor = intentUp.pollFirst();
+                        elevator.getRequestsUp().add(targetFloor);
+                    }
+                    return targetFloor;
                 }
-                return floor;
-            } else if (!floorRequests.getIntentToServeRequestsDown().isEmpty()) {
-                final Integer floor = floorRequests.getIntentToServeRequestsDown().pollFirst();
-                if (floor != null) {
-                    elevator.getRequestsDown().add(floor);
+            }
+
+            synchronized (intentDown) {
+                if (!intentDown.isEmpty()) {
+                    if (isWithinThreshold(currentFloor, intentDown.first())) {
+                        targetFloor = intentDown.pollFirst();
+                        elevator.getRequestsDown().add(targetFloor);
+                    }
+                    return targetFloor;
                 }
-                return floor;
             }
         }
-        return null;
+        return targetFloor;
+    }
+
+    private boolean isWithinThreshold(int currentFloor, Integer targetFloor) {
+        return targetFloor != null && Math.abs(currentFloor - targetFloor) <= THRESHOLD;
     }
 
     private Integer markIntentToServe() {
+
+        final TreeSet<Integer> requestsDown = floorRequests.getRequestsDown();
+        final TreeSet<Integer> requestsUp = floorRequests.getRequestsUp();
+        
         if (isMoving()) {
             final Direction direction = elevator.getDirection();
-            if (Direction.DOWN == direction && !floorRequests.getRequestsDown().isEmpty()) {
+            if (direction == DOWN && !requestsDown.isEmpty()) {
                 return floorRequests.markAsIntent(direction);
-            } else if (Direction.UP == direction && !floorRequests.getRequestsUp().isEmpty()) {
+            } else if (direction == UP && !requestsUp.isEmpty()) {
                 return floorRequests.markAsIntent(direction);
             }
         } else {
-            if (!floorRequests.getRequestsUp().isEmpty()) {
-                return floorRequests.markAsIntent(Direction.UP);
-            } else if (!floorRequests.getRequestsDown().isEmpty()) {
-                return floorRequests.markAsIntent(Direction.DOWN);
+            if (!requestsUp.isEmpty()) {
+                return floorRequests.markAsIntent(UP);
+            } else if (!requestsDown.isEmpty()) {
+                return floorRequests.markAsIntent(DOWN);
             }
         }
         return null;
     }
 
     private boolean isMoving() {
-        return elevator.getDirection() != Direction.STOP;
+        return elevator.getDirection() != STOP;
     }
 
     private void setDirectionAndMove(Integer targetFloor) {
         if (targetFloor > elevator.getCurrentFloor()) {
-            elevator.setDirection(Direction.UP);
+            elevator.setDirection(UP);
         } else if (targetFloor < elevator.getCurrentFloor()) {
-            elevator.setDirection(Direction.DOWN);
+            elevator.setDirection(DOWN);
         }
         simulateSlowness();
         elevator.move();
     }
 
     private boolean isNotMoving() {
-        return elevator.getDirection() == Direction.STOP;
+        return elevator.getDirection() == STOP;
     }
 
     private void simulateSlowness() {

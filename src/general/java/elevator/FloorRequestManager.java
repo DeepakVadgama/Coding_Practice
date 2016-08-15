@@ -1,22 +1,26 @@
 package general.java.elevator;
 
-import java.util.concurrent.ConcurrentSkipListSet;
+
+import java.util.TreeSet;
+
+import static general.java.elevator.Direction.DOWN;
+import static general.java.elevator.Direction.UP;
 
 public class FloorRequestManager {
 
     // Pending floor requests
-    private ConcurrentSkipListSet<Integer> requestsUp = new ConcurrentSkipListSet<>();
-    private ConcurrentSkipListSet<Integer> requestsDown = new ConcurrentSkipListSet<>();
+    private TreeSet<Integer> requestsUp = new TreeSet<>();
+    private TreeSet<Integer> requestsDown = new TreeSet<>();
 
     // Requests where Elevator has shown intent to serve 
-    private ConcurrentSkipListSet<Integer> intentToServeRequestsUp = new ConcurrentSkipListSet<>();
-    private ConcurrentSkipListSet<Integer> intentToServeRequestsDown = new ConcurrentSkipListSet<>();
+    private TreeSet<Integer> intentToServeRequestsUp = new TreeSet<>();
+    private TreeSet<Integer> intentToServeRequestsDown = new TreeSet<>();
 
     public FloorRequestManager() {
     }
 
     public void addRequest(Direction direction, int fromFloor) {
-        if (Direction.DOWN == direction) {
+        if (DOWN == direction) {
             requestsDown.add(fromFloor);
         } else {
             requestsUp.add(fromFloor);
@@ -24,7 +28,7 @@ public class FloorRequestManager {
     }
 
     public void removeRequest(Direction direction, int floor) {
-        if (Direction.DOWN == direction) {
+        if (DOWN == direction) {
             requestsDown.remove(floor);
         } else {
             requestsUp.remove(floor);
@@ -32,40 +36,48 @@ public class FloorRequestManager {
     }
 
     public void removeIntentRequest(Direction direction, int floor) {
-        if (Direction.DOWN == direction) {
+        if (DOWN == direction) {
             intentToServeRequestsDown.remove(floor);
         } else {
             intentToServeRequestsUp.remove(floor);
         }
     }
 
-    public ConcurrentSkipListSet<Integer> getRequestsUp() {
+    public TreeSet<Integer> getRequestsUp() {
         return requestsUp;
     }
 
-    public ConcurrentSkipListSet<Integer> getRequestsDown() {
+    public TreeSet<Integer> getRequestsDown() {
         return requestsDown;
     }
 
-    public ConcurrentSkipListSet<Integer> getIntentToServeRequestsUp() {
+    public TreeSet<Integer> getIntentToServeRequestsUp() {
         return intentToServeRequestsUp;
     }
 
-    public ConcurrentSkipListSet<Integer> getIntentToServeRequestsDown() {
+    public TreeSet<Integer> getIntentToServeRequestsDown() {
         return intentToServeRequestsDown;
     }
 
     public Integer markAsIntent(Direction direction) {
         Integer floor = null;
-        if (Direction.UP == direction) {
-            floor = requestsUp.pollFirst();
-            if (floor != null) {
-                intentToServeRequestsUp.add(floor);
+        if (UP == direction) {
+            synchronized (requestsUp) {
+                synchronized (intentToServeRequestsUp) {
+                    floor = requestsUp.pollFirst();
+                    if (floor != null) {
+                        intentToServeRequestsUp.add(floor);
+                    }
+                }
             }
-        } else if (Direction.DOWN == direction) {
-            floor = requestsDown.pollFirst();
-            if (floor != null) {
-                intentToServeRequestsDown.add(floor);
+        } else if (DOWN == direction) {
+            synchronized (requestsDown) {
+                synchronized (intentToServeRequestsDown) {
+                    floor = requestsDown.pollFirst();
+                    if (floor != null) {
+                        intentToServeRequestsDown.add(floor);
+                    }
+                }
             }
         }
         return floor;
