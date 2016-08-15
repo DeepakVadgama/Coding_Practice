@@ -19,13 +19,23 @@ public class ElevatorSystemManager {
         }
 
         // Initialize system
+
+        // Setup elevators
         for (int i = 0; i < elevatorCount; i++) {
             elevators.put(i + 1, new Elevator(i + 1, minFloor, maxFloor, true));
         }
 
+        // Setup floors
         floorRequestManager = new FloorRequestManager();
         for (int i = minFloor; i <= maxFloor; i++) {
             floors.put(i, new Floor(i, i == maxFloor, i == minFloor, floorRequestManager));
+        }
+
+        // Start elevators
+        for (Elevator elevator : elevators.values()) {
+            final Thread thread = new Thread(new ElevatorController(elevator, floorRequestManager));
+            thread.setName("Elevator-" + elevator.getElevatorNumber());
+            thread.start();
         }
     }
 
@@ -37,4 +47,23 @@ public class ElevatorSystemManager {
         floors.get(floor).requestUp();
     }
 
+    public void logState() {
+        System.out.println();
+        for (Elevator e : elevators.values()) {
+            System.out.print("E" + e.getElevatorNumber() + " " + e.getCurrentFloor() + getDirectionSymbol(e.getDirection()) + ", ");
+        }
+        System.out.print(" Floor Up: " + floorRequestManager.getRequestsUp() + "," + floorRequestManager.getIntentToServeRequestsUp());
+        System.out.print(" Floor Down: " + floorRequestManager.getRequestsDown() + "," + floorRequestManager.getIntentToServeRequestsDown());
+    }
+
+    private String getDirectionSymbol(Direction direction) {
+        if (direction == Direction.DOWN) {
+            return "\u2193";
+        } else if (direction == Direction.UP) {
+            return "\u2191";
+        } else if (direction == Direction.STOP) {
+            return "=";
+        }
+        return "";
+    }
 }
