@@ -21,6 +21,14 @@ public class Elevator {
         this.activated = activated;
     }
 
+    public void addRequest(int floor) {
+        if (floor > currentFloor) {
+            requestsUp.add(floor);
+        } else if (floor < currentFloor) {
+            requestsDown.add(floor);
+        }
+    }
+
     public void move() {
         if (Direction.DOWN == direction) {
             moveDown();

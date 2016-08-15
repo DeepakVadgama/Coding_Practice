@@ -59,10 +59,14 @@ public class FloorRequestManager {
         Integer floor = null;
         if (Direction.UP == direction) {
             floor = requestsUp.pollFirst();
-            intentToServeRequestsUp.add(floor);
+            if (floor != null) {
+                intentToServeRequestsUp.add(floor);
+            }
         } else if (Direction.DOWN == direction) {
             floor = requestsDown.pollFirst();
-            intentToServeRequestsDown.add(floor);
+            if (floor != null) {
+                intentToServeRequestsDown.add(floor);
+            }
         }
         return floor;
     }

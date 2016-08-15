@@ -16,6 +16,14 @@ public class Floor {
         this.lightStatus = false;
     }
 
+    public void request(Direction direction) {
+        if (direction == Direction.DOWN) {
+            requestDown();
+        } else if (direction == Direction.UP) {
+            requestUp();
+        }
+    }
+    
     public void requestUp() {
         if (!isMax) {
             requestManager.addRequest(Direction.UP, number);

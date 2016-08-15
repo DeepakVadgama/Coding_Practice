@@ -74,21 +74,29 @@ public class ElevatorController implements Runnable {
             final Direction direction = elevator.getDirection();
             if (Direction.DOWN == direction && !floorRequests.getIntentToServeRequestsDown().isEmpty()) {
                 final Integer floor = floorRequests.getIntentToServeRequestsDown().pollFirst();
-                elevator.getRequestsDown().add(floor);
+                if (floor != null) {
+                    elevator.getRequestsDown().add(floor);
+                }
                 return floor;
             } else if (Direction.UP == direction && !floorRequests.getIntentToServeRequestsUp().isEmpty()) {
                 final Integer floor = floorRequests.getIntentToServeRequestsUp().pollFirst();
-                elevator.getRequestsUp().add(floor);
+                if (floor != null) {
+                    elevator.getRequestsUp().add(floor);
+                }
                 return floor;
             }
         } else {
             if (!floorRequests.getIntentToServeRequestsUp().isEmpty()) {
                 final Integer floor = floorRequests.getIntentToServeRequestsUp().pollFirst();
-                elevator.getRequestsUp().add(floor);
+                if (floor != null) {
+                    elevator.getRequestsUp().add(floor);
+                }
                 return floor;
             } else if (!floorRequests.getIntentToServeRequestsDown().isEmpty()) {
                 final Integer floor = floorRequests.getIntentToServeRequestsDown().pollFirst();
-                elevator.getRequestsDown().add(floor);
+                if (floor != null) {
+                    elevator.getRequestsDown().add(floor);
+                }
                 return floor;
             }
         }
