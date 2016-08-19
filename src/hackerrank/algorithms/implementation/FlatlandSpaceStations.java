@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * https://www.hackerrank.com/challenges/flatland-space-stations
+ * https://www.hackerrank.com/challenges/flatland-space-stations 
  */
 public class FlatlandSpaceStations {
 
