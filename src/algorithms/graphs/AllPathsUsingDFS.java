@@ -12,7 +12,14 @@ import static java.util.stream.Collectors.joining;
  * - Directional graph which may have cycles
  * - Uses Adjacency list to store graph
  * - Uses recursion
- * <p>
+ *
+ * Input
+ * V = Number of vertexes
+ * E = Number of edges
+ * V1 V2 Weight = For each edge, from vertex, to vertex and weight
+ * Steps = Maximum hops allowed
+ * S D = Source and Target vertex
+ * 
  * Sample input
  * 3 4
  * 0 2
