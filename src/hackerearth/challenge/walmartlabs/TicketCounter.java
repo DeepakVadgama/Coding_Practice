@@ -26,18 +26,19 @@ public class TicketCounter {
 
         // Edges
         for (int i = 0; i < e; i++) {
-            Edge edge = new Edge(in.nextInt(), in.nextInt(), in.nextDouble());
+            int v1 = in.nextInt() - 1;
+            int v2 = in.nextInt() - 1;
+
+            // Reverse direction to help ease graph operations
+            Edge edge = new Edge(v2, v1, in.nextDouble());
             graph.addEdge(edge);
         }
 
         // Shortest 
         AcyclicSP sp = new AcyclicSP(graph);
 
-        Iterable<Integer> order = sp.order();
-        int root = order.iterator().next();
-
         Iterable<Integer> leaves = sp.shortestLeaves();
-        sp.count(leaves.iterator().next());
+        System.out.println(sp.count(graph, leaves.iterator().next()));
         for (Integer w : leaves) {
             sp.print(w);
         }
@@ -47,12 +48,14 @@ public class TicketCounter {
 
         private double[] distTo;
         private Edge[] edgeTo;
+        private Edge[] edgeFrom;
         private Iterable<Integer> order;
 
         public AcyclicSP(Graph G) {
 
             distTo = new double[G.V()];
             edgeTo = new Edge[G.V()];
+            edgeFrom = new Edge[G.V()];
             for (int v = 0; v < G.V(); v++)
                 distTo[v] = Double.POSITIVE_INFINITY;
 
@@ -76,6 +79,7 @@ public class TicketCounter {
             if (distTo[w] > distTo[v] + e.weight()) {
                 distTo[w] = distTo[v] + e.weight();
                 edgeTo[w] = e;
+                edgeFrom[e.from()] = e;
             }
         }
 
@@ -85,29 +89,56 @@ public class TicketCounter {
 
         // There can be multiple shortest paths (ofcourse with same length) 
         public Iterable<Integer> shortestLeaves() {
-            double min = distTo[0];
+            double min = Double.POSITIVE_INFINITY;
             List<Integer> index = new ArrayList<>();
             for (int i = 0; i < distTo.length; i++) {
-                if (distTo[i] < min) {
-                    min = distTo[i];
-                    index.clear();
-                    index.add(i);
-                }
-                if (distTo[i] == min) {
-                    index.add(i);
+                if (isleaf(i)) {
+                    if (distTo[i] < min) {
+                        min = distTo[i];
+                        index.clear();
+                        index.add(i);
+                    } else if (distTo[i] == min) {
+                        index.add(i);
+                    }
                 }
             }
             return index;
         }
 
-        public void print(int w) {
-
+        private boolean isleaf(int i) {
+            return edgeFrom[i] == null;
         }
 
-        public void count(int w) {
-            while (w != -1) {
+        public void print(int w) {
 
+            System.out.print(w + 1);
+            Edge e = edgeTo[w];
+            while (e != null) {
+                System.out.print(" -> " + (e.from() + 1));
+                e = edgeTo[e.from()];
             }
+            System.out.println();
+        }
+
+        public double count(Graph G, int w) {
+
+            double dist = 0.0;
+            Edge e = edgeTo[w];
+            while (e != null) {
+                dist += 2 * minEdge(G, e.from());
+                e = edgeTo[e.from()];
+            }
+            return dist;
+        }
+
+        private double minEdge(Graph G, int w) {
+            double min = Double.POSITIVE_INFINITY;
+            for (Edge e : G.adj(w)) {
+                if (e.weight < min) {
+                    min = e.weight;
+                }
+            }
+            return min;
         }
     }
 
