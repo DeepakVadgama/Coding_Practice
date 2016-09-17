@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
- * https://www.hackerrank.com/challenges/angry-professor
+ * https://www.hackerrank.com/challenges/library-fine
  */
 public class LibraryFine {
 
