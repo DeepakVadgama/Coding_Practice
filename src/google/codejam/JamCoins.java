@@ -24,7 +24,7 @@ public class JamCoins {
             while (c < j) {
                 List<String> factors = new ArrayList<>();
                 for (int k = 2; k <= 10; k++) {
-                    int val = Integer.parseInt(v, k);
+                    long val = Long.parseLong(v, k);
                     for (int l = 2; l <= Math.sqrt(val); l++) {
                         if (val % l == 0) {
                             factors.add(String.valueOf(l));
@@ -35,17 +35,15 @@ public class JamCoins {
 
                 if (factors.size() == 9) {
                     System.out.println(v + " " + String.join(" ", factors));
+                    c++;
                 }
                 v = next(v);
             }
         }
     }
 
-
     private static String next(String v) {
-        int val = Integer.parseInt(v.substring(1, v.length()), 2);
-        val++;
-        return "1" + Integer.toBinaryString(val) + "1";
+        return Long.toBinaryString(Long.parseLong(v, 2) + 2);
     }
 
     private static String first(int n) {
