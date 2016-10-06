@@ -1,4 +1,4 @@
-package google.codejam;
+package google.codejam.y2016.qualification;
 
 import java.util.HashSet;
 import java.util.Scanner;
