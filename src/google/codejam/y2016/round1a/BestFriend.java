@@ -6,6 +6,8 @@ import java.util.Set;
 
 /**
  * https://code.google.com/codejam/contest/4304486/dashboard#s=p2
+ *
+ * First and last person in the circle need to be friend?
  */
 public class BestFriend {
 
