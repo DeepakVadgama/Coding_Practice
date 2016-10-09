@@ -1,4 +1,4 @@
-package book.crackingcodinginterview;
+package book.crackingcodinginterview.linkedlist;
 
 import java.util.Scanner;
 
@@ -13,7 +13,7 @@ import java.util.Scanner;
  * (If lists are in forward order its easier to reverse and add
  * due to carry overs and singly linked list)
  */
-public class SumOfLinkedLists {
+public class Sum {
 
     public static class LinkedList {
 

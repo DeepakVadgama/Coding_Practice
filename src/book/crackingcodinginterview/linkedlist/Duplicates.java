@@ -1,4 +1,4 @@
-package book.crackingcodinginterview;
+package book.crackingcodinginterview.linkedlist;
 
 import java.util.HashSet;
 import java.util.Scanner;
@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Remove all duplicates from linked list
  */
-public class LinkedListDuplicates {
+public class Duplicates {
 
     public static class LinkedList {
 
