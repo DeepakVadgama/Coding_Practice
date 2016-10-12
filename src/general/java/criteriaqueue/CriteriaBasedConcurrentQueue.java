@@ -42,7 +42,7 @@ public class CriteriaBasedConcurrentQueue<E extends Criteria> {
         synchronized (elementQueue) {
 
             // Wait if queue full
-            if (elementQueue.size() == size) {
+            while (elementQueue.size() == size) {
                 try {
                     System.out.println("Queue full for " + criteria + ". Waiting.. ");
                     elementQueue.wait();
