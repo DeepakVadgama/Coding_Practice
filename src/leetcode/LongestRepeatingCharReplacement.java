@@ -25,6 +25,9 @@ public class LongestRepeatingCharReplacement {
     }
 
     public static int characterReplacement(String s, int k) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
         char[] chars = s.toCharArray();
         int max = -1;
         for (int i = 0; i < 26; i++) {
@@ -49,7 +52,7 @@ public class LongestRepeatingCharReplacement {
                 count++;
                 j++;
             }
-            count = count + tk;
+            count = count + Math.min(chars.length - count, tk);
             if (indexes.containsKey(j)) {
                 count = count + indexes.get(j) - j + 1;
             }
