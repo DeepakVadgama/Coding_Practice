@@ -5,8 +5,10 @@ import java.util.Scanner;
 /**
  * https://leetcode.com/problems/strong-password-checker/
  * <p>
- * Assumption (different than in leetcode) -
- * Repeating characters is acceptable, if cases are different. eg: aAa is ok
+ * LeetCode is stupid, it says repeating 3 chars is not ok
+ * It had these 2 examples.
+ * aaa111  expected answer is 2 (so even repeating digits is not ok)
+ * ...     expected answer is 3 (WTH.. so repeating special chars is ok, but not digits?)
  */
 public class StrongPasswords {
 
@@ -58,8 +60,7 @@ public class StrongPasswords {
         int i = 0;
         while (i + 2 < str.length()) {
             char ch = str.charAt(i);
-            if (Character.isLetter(ch)
-                    && ch == str.charAt(i + 1)
+            if (ch == str.charAt(i + 1)
                     && ch == str.charAt(i + 2)) {
                 triplets++;
                 i += 3;
