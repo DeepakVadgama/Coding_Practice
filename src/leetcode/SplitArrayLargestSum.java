@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 /**
  * https://leetcode.com/problems/split-array-largest-sum/
+ *
+ * Wrong code - Doesn't work for [2,3,1,2,4,3] m=5, expected=4, actual=6
  */
 public class SplitArrayLargestSum {
 
