@@ -1,14 +1,17 @@
 package leetcode;
 
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * https://leetcode.com/problems/frog-jump/
  * <p>
- * Wrong solution.. See this for correct one
+ * cheated -- found solution here
  * https://discuss.leetcode.com/topic/61561/simple-and-easy-understand-java-solution
+ *
+ * eg:
+ * 0 1 2 3 6 8 12 17  // true
+ * 0 1 2 3 4 8 9 11  // false
+ *
  */
 public class FrogJumps {
     public static void main(String[] args) {
@@ -23,23 +26,30 @@ public class FrogJumps {
     }
 
     private static boolean solve(int[] arr, int k) {
-        Set<Integer> visited = new HashSet<>();
-        visited.add(0);
-        return jump(arr, 0, k, visited);
+
+        if (!startsWith(arr, 0, 1)) {
+            return false;
+        }
+
+        Map<Integer, Set<Integer>> jumps = new HashMap<>();
+        jumps.computeIfAbsent(1, key -> new HashSet<>()).add(1);
+
+        for (int i = 2; i < arr.length; i++) {
+            for (int j = 1; j < i; j++) {
+                int dist = arr[i] - arr[j];
+                Set<Integer> jumpSet = jumps.get(arr[j]);
+                if (jumpSet != null
+                        && (jumpSet.contains(dist)
+                        || jumpSet.contains(dist + 1)
+                        || jumpSet.contains(dist - 1))) {
+                    jumps.computeIfAbsent(arr[i], key -> new HashSet<>()).add(dist);
+                }
+            }
+        }
+        return jumps.get(arr[arr.length - 1]) != null;
     }
 
-    /**
-     * Using recursion and memoization.
-     */
-    private static boolean jump(int[] arr, int i, int k, Set<Integer> visited) {
-        if (i == arr[arr.length - 1]) {
-            return true;
-        } else if (k <= 0 || i > arr[arr.length - 1]) {
-            return false;
-        } else {
-            return jump(arr, i + k, k, visited)
-                    || jump(arr, i + k - 1, k - 1, visited)
-                    || jump(arr, i + k + 1, k + 1, visited);
-        }
+    private static boolean startsWith(int[] arr, int i, int j) {
+        return arr.length >= 2 && arr[0] == i && arr[1] == j;
     }
 }
