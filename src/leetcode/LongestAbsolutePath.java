@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 /**
  * https://leetcode.com/problems/longest-absolute-file-path/
+ *
+ * Not working in leetcode env due to interpretation of \t and \n
  */
 public class LongestAbsolutePath {
     public static void main(String[] args) {
