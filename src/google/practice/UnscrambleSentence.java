@@ -76,6 +76,14 @@ public class UnscrambleSentence {
         return null;
     }
 
+    private static String rest(String scrambled, String word) {
+        return null;
+    }
+
+    private static String[] allSubsets(String scrambled) {
+        return new String[0];
+    }
+
     // For loop of checking all permutations (complexity=O(n!)) is avoided
     // All dictionary words and prefix can be sorted and compared in 1 step
     private static boolean isAnyPermutationValid(String prefix) {
