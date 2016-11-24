@@ -1,15 +1,17 @@
 package leetcode;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * https://leetcode.com/problems/lfu-cache/
  */
 public class LFUCache {
 
-    private Map<Integer, Integer> values = new HashMap<>();
+    private Map<Integer, Node> values = new HashMap<>();
     private Map<Integer, Integer> counts = new HashMap<>();
-    private TreeMap<Integer, List<Integer>> frequencies = new TreeMap<>();
+    private TreeMap<Integer, DoubleLinkedList> frequencies = new TreeMap<>();
     private final int MAX_CAPACITY;
 
     public LFUCache(int capacity) {
@@ -21,35 +23,100 @@ public class LFUCache {
             return -1;
         }
 
-        // Move item from one frequency list to next. Not O(1) due to list iteration.
+        Node node = values.get(key);
+
+        // Move item from one frequency list to next. O(1) this time.
         int frequency = counts.get(key);
-        frequencies.get(frequency).remove(new Integer(key));
-        if (frequencies.get(frequency).size() == 0) {
-            frequencies.remove(frequency);  // remove from map if list is empty
-        }
-        frequencies.computeIfAbsent(frequency + 1, k -> new LinkedList<>()).add(key);
+        frequencies.get(frequency).remove(node);
+        removeIfListEmpty(frequency);
+        frequencies.computeIfAbsent(frequency + 1, k -> new DoubleLinkedList()).add(node);
 
         counts.put(key, frequency + 1);
-        return values.get(key);
+        return values.get(key).value;
     }
 
     public void set(int key, int value) {
         if (!values.containsKey(key)) {
 
+            Node node = new Node(key, value);
+
             if (values.size() == MAX_CAPACITY) {
-                // first item from 'list of smallest frequency'
-                int lowestCount = frequencies.firstKey();
-                int keyToDelete = frequencies.get(lowestCount).remove(0);
-                if (frequencies.get(lowestCount).size() == 0) {
-                    frequencies.remove(lowestCount); // remove from map if list is empty
-                }
+
+                int lowestCount = frequencies.firstKey();   // smallest frequency
+                Node nodeTodelete = frequencies.get(lowestCount).head(); // first item (LRU)
+                frequencies.get(lowestCount).remove(nodeTodelete);
+
+                int keyToDelete = nodeTodelete.key();
+                removeIfListEmpty(lowestCount);
                 values.remove(keyToDelete);
                 counts.remove(keyToDelete);
             }
 
-            values.put(key, value);
+            values.put(key, node);
             counts.put(key, 1);
-            frequencies.computeIfAbsent(1, k -> new LinkedList<>()).add(key); // starting frequency = 1
+            frequencies.computeIfAbsent(1, k -> new DoubleLinkedList()).add(node); // starting frequency = 1
+        }
+    }
+
+    private void removeIfListEmpty(int frequency) {
+        if (frequencies.get(frequency).size() == 0) {
+            frequencies.remove(frequency);  // remove from map if list is empty
+        }
+    }
+
+    private class Node {
+        private int key;
+        private int value;
+        private Node next;
+        private Node prev;
+
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public int key() {
+            return key;
+        }
+
+        public int value() {
+            return value;
+        }
+    }
+
+    private class DoubleLinkedList {
+        private int n;
+        private Node head;
+        private Node tail;
+
+        public void add(Node node) {
+            if (head == null) {
+                head = node;
+            } else {
+                tail.next = node;
+                node.prev = tail;
+            }
+            tail = node;
+            n++;
+        }
+
+        public void remove(Node node) {
+
+            if (node.next == null) tail = node.prev;
+            else node.next.prev = node.prev;
+
+            if (head.key == node.key) head = node.next;
+            else node.prev.next = node.next;
+
+            n--;
+        }
+
+        public Node head() {
+            return head;
+        }
+
+        public int size() {
+            return n;
         }
     }
 
