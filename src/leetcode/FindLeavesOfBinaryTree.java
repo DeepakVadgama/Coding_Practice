@@ -3,6 +3,7 @@ package leetcode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * https://leetcode.com/problems/find-leaves-of-binary-tree
@@ -12,6 +13,7 @@ public class FindLeavesOfBinaryTree {
     public List<List<Integer>> findLeaves(TreeNode root) {
         HashMap<Integer, List<Integer>> leavesPerDepth = new HashMap<>();
         dfs(root, leavesPerDepth);
+        return leavesPerDepth.values().stream().collect(Collectors.toList());
     }
 
     private int dfs(TreeNode node, HashMap<Integer, List<Integer>> leavesMap) {
