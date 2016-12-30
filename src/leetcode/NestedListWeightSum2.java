@@ -6,6 +6,12 @@ import java.util.TreeMap;
 
 /**
  * https://leetcode.com/problems/nested-list-weight-sum-ii
+ *
+ * Alternate beautiful solution
+ * https://discuss.leetcode.com/topic/49041/no-depth-variable-no-multiplication
+ *
+ * It just keeps adding cumulative sum of below levels, to current level,
+ * effectively multiplying by adding repeatedly
  */
 public class NestedListWeightSum2 {
 
