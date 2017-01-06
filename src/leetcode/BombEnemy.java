@@ -13,6 +13,16 @@ public class BombEnemy {
                 {'E', 0, 'W', 0},
                 {0, 'E', 0, 0}
         }));
+        System.out.println(maxKilledEnemies(new char[][]{
+                {0, 'E', 0, 0},
+                {'E', 'W', 'W', 0},
+                {0, 'E', 0, 0}
+        }));
+        System.out.println(maxKilledEnemies(new char[][]{
+                {0, 0, 0, 0},
+                {0, 0, 0, 0},
+                {0, 0, 0, 0}
+        }));
     }
 
     public static int maxKilledEnemies(char[][] grid) {
