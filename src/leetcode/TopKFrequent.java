@@ -24,7 +24,7 @@ public class TopKFrequent {
         // frequency can be max nums.length
         // wastes lot of space (many slots will be blank),
         // but this avoid having to sort the map by value
-        List<Integer>[] buckets = new List[nums.length];
+        List<Integer>[] buckets = new List[nums.length + 1];
         for (Map.Entry<Integer, Integer> entry : freq.entrySet()) {
             if (buckets[entry.getValue()] == null) {
                 buckets[entry.getValue()] = new ArrayList<>();
