@@ -12,7 +12,7 @@ import java.util.Scanner;
  * - Using Adjacency list to store graph
  * - Using recursion
  */
-public class DFS_ConnectedCycle {
+public class DFS_ConnectedComponent {
 
     private static LinkedList<Integer>[] adj;
     private static boolean[] marked;
