@@ -19,22 +19,9 @@ public class DepthFirstSearch {
     private static int[] dist;
 
     public static void main(String[] args) {
+
         Scanner in = new Scanner(System.in);
-
-        // Vertices
-        int v = in.nextInt();
-        adj = new LinkedList[v];
-        for (int i = 0; i < v; i++) {
-            adj[i] = new LinkedList<>();
-        }
-
-        // Edges
-        int e = in.nextInt();
-        for (int i = 0; i < e; i++) {
-            int v1 = in.nextInt();
-            int v2 = in.nextInt();
-            adj[v1].add(v2);
-        }
+        createGraph(in);
 
         int s = in.nextInt();
         marked = new boolean[adj.length];
@@ -54,6 +41,23 @@ public class DepthFirstSearch {
                 dist[v] = dist[i] + 1;
                 dfs(v);
             }
+        }
+    }
+
+    private static void createGraph(Scanner in) {
+        // Vertices
+        int v = in.nextInt();
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; i++) {
+            adj[i] = new LinkedList<>();
+        }
+
+        // Edges
+        int e = in.nextInt();
+        for (int i = 0; i < e; i++) {
+            int v1 = in.nextInt();
+            int v2 = in.nextInt();
+            adj[v1].add(v2);
         }
     }
 

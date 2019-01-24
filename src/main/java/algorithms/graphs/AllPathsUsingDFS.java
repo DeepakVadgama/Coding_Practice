@@ -39,21 +39,7 @@ public class AllPathsUsingDFS {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-
-        // Vertices
-        int v = in.nextInt();
-        adj = new LinkedList[v];
-        for (int i = 0; i < v; i++) {
-            adj[i] = new LinkedList<>();
-        }
-
-        // Edges
-        int e = in.nextInt();
-        for (int i = 0; i < e; i++) {
-            int v1 = in.nextInt();
-            int v2 = in.nextInt();
-            adj[v1].add(v2);
-        }
+        createGraph(in);
 
         // Threshold
         THRESHOLD = in.nextInt();
@@ -83,5 +69,22 @@ public class AllPathsUsingDFS {
 
     private static void print(List<Integer> path, int v) {
         System.out.println(path.stream().map(String::valueOf).collect(joining(" -> ")) + " -> " + v);
+    }
+
+    private static void createGraph(Scanner in) {
+        // Vertices
+        int v = in.nextInt();
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; i++) {
+            adj[i] = new LinkedList<>();
+        }
+
+        // Edges
+        int e = in.nextInt();
+        for (int i = 0; i < e; i++) {
+            int v1 = in.nextInt();
+            int v2 = in.nextInt();
+            adj[v1].add(v2);
+        }
     }
 }

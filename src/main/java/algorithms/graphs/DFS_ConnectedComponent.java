@@ -21,22 +21,9 @@ public class DFS_ConnectedComponent {
     private static int[] id;
 
     public static void main(String[] args) {
+
         Scanner in = new Scanner(System.in);
-
-        // Vertices
-        int v = in.nextInt();
-        adj = new LinkedList[v];
-        for (int i = 0; i < v; i++) {
-            adj[i] = new LinkedList<>();
-        }
-
-        // Edges
-        int e = in.nextInt();
-        for (int i = 0; i < e; i++) {
-            int v1 = in.nextInt();
-            int v2 = in.nextInt();
-            adj[v1].add(v2);
-        }
+        int v = createGraph(in);
 
         marked = new boolean[adj.length];
         size = new int[adj.length];
@@ -65,5 +52,23 @@ public class DFS_ConnectedComponent {
                 dfs(v);
             }
         }
+    }
+
+    private static int createGraph(Scanner in) {
+        // Vertices
+        int v = in.nextInt();
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; i++) {
+            adj[i] = new LinkedList<>();
+        }
+
+        // Edges
+        int e = in.nextInt();
+        for (int i = 0; i < e; i++) {
+            int v1 = in.nextInt();
+            int v2 = in.nextInt();
+            adj[v1].add(v2);
+        }
+        return v;
     }
 }
