@@ -29,7 +29,7 @@ public class Problem_7_Decode_Int_To_String {
     private static int decodedCount(int[] input, int[] memoizedCount, int index) {
 
         if (index >= input.length) {
-            return 1;
+            return 0;
         }
 
         if (index == input.length - 1) {
@@ -43,7 +43,7 @@ public class Problem_7_Decode_Int_To_String {
 
         int count = decodedCount(input, memoizedCount, index + 1);
         if (validNumber(input, index, index + 1)) {
-            count += decodedCount(input, memoizedCount, index + 2);
+            count += 1 + decodedCount(input, memoizedCount, index + 2);
         }
 
         memoizedCount[index] = count;
