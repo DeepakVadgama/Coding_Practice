@@ -1,27 +1,20 @@
-package teaching.concurrency.questions.timeout;
+package teaching.concurrency.questions.producer_consumer;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ProducerConsumerTest {
+public class ProducerConsumer {
 
     public static void main(String[] args) throws InterruptedException {
 
-        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+        BlockingQueue<Item> queue = new ArrayBlockingQueue<>(10);
 
         final Runnable producer = () -> {
 
-            int ctr = 1;
             while (true) {
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 // blocks if queue is full
                 try {
-                    queue.put(ctr++);
+                    queue.put(createItem());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -32,21 +25,13 @@ public class ProducerConsumerTest {
 
         final Runnable consumer = () -> {
             while (true) {
-
                 try {
-                    Thread.sleep(1000);
+                    // blocks if queue is empty
+                    Item i = queue.take();
+                    process(i);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                // blocks if queue is empty
-                int num = 0;
-                try {
-                    num = queue.take();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(num);
             }
         };
         Thread consumerThread1 = new Thread(consumer);
@@ -55,6 +40,7 @@ public class ProducerConsumerTest {
 
         producerThread1.start();
         producerThread2.start();
+
         consumerThread1.start();
         consumerThread2.start();
         consumerThread3.start();
@@ -62,7 +48,11 @@ public class ProducerConsumerTest {
         Thread.sleep(1000);
     }
 
-    private static Item getNextItem() {
+    private static void process(Item i) {
+
+    }
+
+    private static Item createItem() {
         return new Item();
     }
 
