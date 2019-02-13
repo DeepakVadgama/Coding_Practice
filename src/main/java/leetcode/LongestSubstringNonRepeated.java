@@ -11,6 +11,7 @@ public class LongestSubstringNonRepeated {
     public static void main(String[] args) {
         System.out.println(new LongestSubstringNonRepeated().lengthOfLongestSubstring("bbbbb"));
         System.out.println(new LongestSubstringNonRepeated().lengthOfLongestSubstring("abcdbefc"));
+        System.out.println(new LongestSubstringNonRepeated().lengthOfLongestSubstring("abcde"));
     }
 
     public int lengthOfLongestSubstring(String input) {
