@@ -4,7 +4,8 @@ public class NumberOfIslands {
 
     public static void main(String[] args) {
         NumberOfIslands obj = new NumberOfIslands();
-        int[][] matrix = {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 0, 1}};
+//        int[][] matrix = {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 0, 1}};
+        int[][] matrix = {{1, 1, 1}, {0, 1, 0}, {1, 1, 1}};
         System.out.println(obj.numberOfIslands(matrix));
     }
 
@@ -33,13 +34,15 @@ public class NumberOfIslands {
 
     private void markAll(int[][] matrix, boolean[][] visited, int row, int col) {
 
+        if (!isValid(matrix, row, col) || matrix[row][col] == 0 || visited[row][col]) {
+            return;
+        }
+
         visited[row][col] = true;
-        if (isValid(matrix, row + 1, col) && matrix[row + 1][col] == 1) {
-            markAll(matrix, visited, row + 1, col);
-        }
-        if (isValid(matrix, row, col + 1) && matrix[row][col + 1] == 1) {
-            markAll(matrix, visited, row, col + 1);
-        }
+        markAll(matrix, visited, row + 1, col);  // right
+        markAll(matrix, visited, row, col + 1);  // down
+        markAll(matrix, visited, row - 1, col);  // left
+        markAll(matrix, visited, row, col - 1);  // up
     }
 
     private boolean isValid(int[][] matrix, int row, int col) {

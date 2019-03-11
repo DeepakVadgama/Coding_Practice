@@ -18,25 +18,25 @@ public class QuickSort {
         System.out.println(Arrays.toString(n));
     }
 
-    private static void sort(int[] n, int p, int r) {
-        if (p < r) {
-            int q = partition(n, p, r);
-            sort(n, p, q - 1);
-            sort(n, q + 1, r);
+    private static void sort(int[] n, int start, int end) {
+        if (start < end) {
+            int mid = partition(n, start, end);
+            sort(n, start, mid - 1);
+            sort(n, mid + 1, end);
         }
     }
 
-    private static int partition(int[] n, int p, int r) {
-        int x = n[r];
-        int j = p, i = p - 1;
-        while (j < r) {
+    private static int partition(int[] n, int start, int end) {
+        int x = n[end];
+        int j = start, i = start - 1;
+        while (j < end) {
             if (n[j] < x) {
                 i++;
                 swap(n, i, j);
             }
             j++;
         }
-        swap(n, i + 1, r);
+        swap(n, i + 1, end);
         return i + 1;
     }
 
@@ -44,13 +44,5 @@ public class QuickSort {
         int temp = n[i];
         n[i] = n[j];
         n[j] = temp;
-    }
-
-    private static int right(int i) {
-        return 2 * i + 2;
-    }
-
-    private static int left(int i) {
-        return 2 * i + 1;
     }
 }

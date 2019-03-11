@@ -3,6 +3,7 @@ package leetcode;
 public class NQueenProblem {
 
     public static void main(String[] args) {
+
         System.out.println(new NQueenProblem().waysToPlaceQueen(0, new int[]{-1, -1, -1, -1}));
         System.out.println(new NQueenProblem().waysToPlaceQueen(0, new int[]{-1, -1, -1, -1, -1}));
         System.out.println(new NQueenProblem().waysToPlaceQueen(0, new int[]{-1, -1, -1, -1, -1, -1}));
