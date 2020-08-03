@@ -1,0 +1,19 @@
+class Solution {
+private int maxSum = Integer.MIN_VALUE;
+
+public int maxPathSum(TreeNode root){
+	maxPathSumDown(root);
+	return maxSum;
+}
+
+private int maxPathSumDown(TreeNode node){
+	if(node == null){
+		return 0;
+	}
+	int leftVal = Math.max(0, maxPathSumDown(node.left));
+	int rightVal = Math.max(0, maxPathSumDown(node.right));
+	maxSum = Math.max(maxSum, rightVal + leftVal + node.val);
+  return Math.max(leftVal, rightVal) + node.val;
+}
+
+}
